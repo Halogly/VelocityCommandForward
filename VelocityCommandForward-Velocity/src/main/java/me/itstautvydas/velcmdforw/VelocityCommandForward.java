@@ -50,18 +50,21 @@ public class VelocityCommandForward {
 
         @SuppressWarnings("UnstableApiUsage")
         var in = ByteStreams.newDataInput(event.getData());
-        String uuidRaw = in.readUTF();
-        String command = in.readUTF();
-
-        logger.info("Received proxy command packet from {} => /{}", uuidRaw.isEmpty() ? "console" : "player", command);
-
+        var uuidRaw = in.readUTF();
+        var command = in.readUTF();
         if (uuidRaw.isEmpty()) { // Console
+            log("CONSOLE", command);
             proxy.getCommandManager().executeAsync(proxy.getConsoleCommandSource(), command);
         } else { // Player
             var uuid = UUID.fromString(uuidRaw);
-            proxy.getPlayer(uuid).ifPresent(player ->
-                    proxy.getCommandManager().executeAsync(player, command)
-            );
+            proxy.getPlayer(uuid).ifPresent(player -> {
+                log(player.getUsername(), command);
+                proxy.getCommandManager().executeAsync(player, command);
+            });
         }
+    }
+
+    private void log(String sender, String command) {
+        logger.info("[{}] Received proxy command packet => /{}", sender, command);
     }
 }
