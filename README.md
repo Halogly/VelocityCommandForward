@@ -1,6 +1,13 @@
 # VelocityCommandForward
 Forward commands from backend to proxy!
 
+## Features
+* Players and console can execute proxy commands (sends a packet to the proxy to execute either as player or console)
+* Custom command
+
+## Notes
+* Configuration only generates for backend server!
+
 ## Use case for this?
 * My use case was very niche, I have a discord command that can run minecraft commands (if player is online) and
 the issue was that the discord bot was running on backend server and so I decided to make a plugin to run proxy
@@ -22,6 +29,15 @@ Be aware that if command doesn't exist, it gives no output.
 
 ## Executing in console
 If you execute the command in the console, you won't get any output and instead it's going to show up in the proxy server logs.
+There must be at least one online player to be able to send command packet to the proxy (that's how plugin messaging channels work between backend and proxy).
+
+Backend server.
+
+![image](https://github.com/user-attachments/assets/0a55af23-2319-49f0-a6d9-ec6125fdeaac)
+
+Proxy server.
+
+![image](https://github.com/user-attachments/assets/1d04272e-5f70-42da-8c78-61dd529de442)
 
 ## Default configuration for backend
 Changing custom command requires a server restart
