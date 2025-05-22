@@ -1,0 +1,4 @@
+# VelocityCommandForward
+
+# Main command for forwarding commands to proxy
+custom-command: proxyexec

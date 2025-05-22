@@ -1,0 +1,7 @@
+name: VelocityCommandForward
+version: '1.0.0'
+main: me.itstautvydas.velcmdforw.VelocityCommandForward
+api-version: '1.21'
+prefix: VelocityCommandForward
+authors: [ItsTauTvyDas]
+website: https://itstautvydas.me
