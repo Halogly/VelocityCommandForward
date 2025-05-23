@@ -49,6 +49,6 @@ custom-command: proxyexec
 ```
 
 ## Requirements
-* Java 21.
+* Velocity plugin was built with Java 17 and Paper plugin - Java 21.
 * This was built with Velocity `3.4.0-SNAPSHOT` and `Paper 1.21.5-R0.1-SNAPSHOT`.
   * If you are running lower versions, check Velocity/PaperMC documentations if things I used in the code are supported for those specific versions.
