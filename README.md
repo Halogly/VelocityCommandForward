@@ -2,8 +2,11 @@
 Forward commands from backend to proxy!
 
 ## Features
-* Players and console can execute proxy commands (sends a packet to the proxy to execute either as player or console)
-* Custom command
+* Players and console can execute proxy commands (sends a packet to the proxy to execute either as player or console).
+* Custom command.
+
+## Installation
+Download both Velocity and Paper versions and upload to their designed servers.
 
 ## Notes
 * Configuration only generates for backend server!
@@ -15,6 +18,7 @@ commands, such as `/skin`.
 
 ## Command usage
 Command name can be changed in the backend plugin configuration.
+
 `/proxyexec skin set Notch`
 
 In the examples I changed the command to `proxy`, I didn't set it as default because I was worried that some other plugin could use this command already.
