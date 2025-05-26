@@ -6,7 +6,7 @@ Forward commands from backend to proxy!
 * Custom command.
 
 ## Installation
-Download both Velocity and Paper versions and upload to their designed servers.
+Very simple, download both Velocity and Paper plugin versions and upload to their designed servers (backend/proxy).
 
 ## Notes
 * Configuration only generates for backend server!
@@ -53,6 +53,5 @@ custom-command: proxyexec
 ```
 
 ## Requirements
-* Velocity plugin was built with Java 17 and Paper plugin - Java 21.
-* This was built with Velocity `3.4.0-SNAPSHOT` and `Paper 1.21.5-R0.1-SNAPSHOT`.
-  * If you are running lower versions, check Velocity/PaperMC documentations if things I used in the code are supported for those specific versions.
+* Velocity plugin was built with `Java 17` and Paper plugin - `Java 21`.
+* Might work on lower minecraft versions, not tested, though you need to meet Java version requirements!
