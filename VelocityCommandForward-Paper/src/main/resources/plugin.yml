@@ -5,3 +5,13 @@ api-version: '1.21'
 prefix: VelocityCommandForward
 authors: [ItsTauTvyDas]
 website: https://itstautvydas.me
+
+commands:
+  vcf:
+    description: Used to reload plugin
+    permission: velocitycommandforward.admin
+    usage: /vcf reload
+
+permissions:
+  velocitycommandforward.admin:
+    default: op

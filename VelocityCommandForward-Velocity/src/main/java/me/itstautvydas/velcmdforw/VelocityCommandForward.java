@@ -2,9 +2,9 @@ package me.itstautvydas.velcmdforw;
 
 import com.google.common.io.ByteStreams;
 import com.google.inject.Inject;
+import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.connection.PluginMessageEvent;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
-import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.ServerConnection;
@@ -20,6 +20,7 @@ import java.util.UUID;
         url = "https://itstautvydas.me",
         authors = { "ItsTauTvyDas" }
 )
+@SuppressWarnings("ClassCanBeRecord")
 public class VelocityCommandForward {
 
     private final Logger logger;
@@ -40,31 +41,29 @@ public class VelocityCommandForward {
 
     @Subscribe
     public void onPluginMessage(PluginMessageEvent event) {
-        if (!CHANNEL.equals(event.getIdentifier()))
-            return;
+        if (!CHANNEL.equals(event.getIdentifier())) return;
 
         event.setResult(PluginMessageEvent.ForwardResult.handled());
 
-        if (!(event.getSource() instanceof ServerConnection))
-            return;
+        if (!(event.getSource() instanceof ServerConnection)) return;
 
         @SuppressWarnings("UnstableApiUsage")
         var in = ByteStreams.newDataInput(event.getData());
         var uuidRaw = in.readUTF();
         var command = in.readUTF();
+        byte flags = in.readByte();
+        String log = in.readUTF();
+        boolean shouldFilterCommand = (flags & 0x01) != 0;
+
         if (uuidRaw.isEmpty()) { // Console
-            log("CONSOLE", command);
+            if (!shouldFilterCommand && !log.isEmpty()) logger.info(log);
             proxy.getCommandManager().executeAsync(proxy.getConsoleCommandSource(), command);
         } else { // Player
             var uuid = UUID.fromString(uuidRaw);
             proxy.getPlayer(uuid).ifPresent(player -> {
-                log(player.getUsername(), command);
+                if (!shouldFilterCommand && !log.isEmpty()) logger.info(log);
                 proxy.getCommandManager().executeAsync(player, command);
             });
         }
-    }
-
-    private void log(String sender, String command) {
-        logger.info("[{}] Received proxy command packet => /{}", sender, command);
     }
 }

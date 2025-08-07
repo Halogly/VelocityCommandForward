@@ -1,67 +1,60 @@
 package me.itstautvydas.velcmdforw;
 
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
+import com.mojang.brigadier.tree.LiteralCommandNode;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.Bukkit;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.entity.Player;
+import me.itstautvydas.velcmdforw.commands.CustomCommand;
+import me.itstautvydas.velcmdforw.commands.ReloadCommand;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class VelocityCommandForward extends JavaPlugin {
 
     public static final String CHANNEL = "velocity_command_forward:main";
 
-    @SuppressWarnings("UnstableApiUsage")
+    public String customCommandName;
+    private MessageUtil messageUtil;
+
+
     @Override
     public void onEnable() {
         getServer().getMessenger().registerOutgoingPluginChannel(this, CHANNEL);
 
-        saveDefaultConfig();
-        reloadConfig();
+        if (hasNoConfig()) saveDefaultConfig();
+        getConfig().options().copyDefaults(true);
+        saveConfig();
 
-        var customCommandName = getConfig().getString("custom-command", "proxyexec");
+        this.messageUtil = new MessageUtil(this);
+        this.customCommandName = getConfig().getString("custom-command", "proxyexec");
+        ReloadCommand reloadCommand = new ReloadCommand(this, messageUtil);
+        CustomCommand customCommand = new CustomCommand(this, messageUtil);
 
-        this.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands -> {
-            commands.registrar().register(customCommandName, (commandSourceStack, args) -> {
-                var sender = commandSourceStack.getSender();
-                if (args.length == 0) {
-                    sender.sendMessage(Component.text("Usage: /" + customCommandName + " <command>", NamedTextColor.RED));
-                    return;
-                }
+        registerCommand(reloadCommand.vcfCommand());
+        registerCommand(customCommand.buildCustomCommand());
 
-                var command = String.join(" ", args);
-                ByteArrayDataOutput out = ByteStreams.newDataOutput();
-
-                if (sender instanceof Player player) {
-                    out.writeUTF(player.getUniqueId().toString());
-                    out.writeUTF(command);
-                    player.sendPluginMessage(VelocityCommandForward.this, CHANNEL, out.toByteArray());
-                    log(player.getName(), command);
-                    sender.sendMessage(Component.text("Command sent to proxy", NamedTextColor.DARK_GREEN)
-                            .append(Component.text(" => ", NamedTextColor.WHITE))
-                            .append(Component.text("/" + command, NamedTextColor.GREEN)));
-                } else if (sender instanceof ConsoleCommandSender) {
-                    out.writeUTF(""); // Console
-                    out.writeUTF(command);
-                    var any = Bukkit.getOnlinePlayers().stream().findFirst().orElse(null);
-                    if (any == null) {
-                        sender.sendMessage(Component.text("There must be at least 1 online player to be able to execute proxy console commands!", NamedTextColor.RED));
-                        return;
-                    }
-                    any.sendPluginMessage(VelocityCommandForward.this, CHANNEL, out.toByteArray());
-                    log("CONSOLE", command);
-                    sender.sendMessage(Component.text("Command sent as console to proxy", NamedTextColor.DARK_GREEN)
-                            .append(Component.text(" => ", NamedTextColor.WHITE))
-                            .append(Component.text("/" + command, NamedTextColor.GREEN)));
-                }
-            });
-        });
+        this.getLogger().info("Custom Command: " + customCommandName);
     }
 
-    private void log(String type, String command) {
-        this.getLogger().info("[" + type + "] Sending command packet to proxy => /" + command);
+    public boolean hasNoConfig() {
+        File configFile = new File(getDataFolder(), "config.yml");
+        return !configFile.exists();
+    }
+
+    public void registerCommand(LiteralCommandNode<CommandSourceStack> commandNode) {
+        this.getLifecycleManager().registerEventHandler(
+                LifecycleEvents.COMMANDS,
+                commands -> commands.registrar().register(commandNode)
+        );
+    }
+
+    public void log(String sender, String command) {
+        if (messageUtil.shouldFilterCommand(command)) return;
+        Map<String, String> placeholders = new HashMap<>();
+        placeholders.put("sender", sender);
+        placeholders.put("command", command);
+        messageUtil.consoleLog("messages.console-log", placeholders);
     }
 }
