@@ -29,10 +29,6 @@ public class CustomCommand {
 
     public LiteralCommandNode<CommandSourceStack> buildCustomCommand() {
         return Commands.literal(plugin.customCommandName)
-                .executes(context -> {
-                    handleCommand(context.getSource(), new String[0]);
-                    return Command.SINGLE_SUCCESS;
-                })
                 .then(Commands.argument("command", StringArgumentType.greedyString())
                         .executes(context -> {
                             String command = StringArgumentType.getString(context, "command");
@@ -44,14 +40,6 @@ public class CustomCommand {
 
     private void handleCommand(CommandSourceStack source, String[] args) {
         CommandSender sender = source.getSender();
-
-        if (args.length == 0 || args[0].isEmpty()) {
-            Map<String, String> placeholders = new HashMap<>();
-            placeholders.put("custom_command", plugin.customCommandName);
-            messageUtil.sendMessage(sender, "messages.usage", placeholders);
-            return;
-        }
-
         String command = String.join(" ", args);
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
 

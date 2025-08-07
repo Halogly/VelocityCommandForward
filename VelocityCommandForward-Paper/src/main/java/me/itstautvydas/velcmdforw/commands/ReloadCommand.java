@@ -8,9 +8,6 @@ import me.itstautvydas.velcmdforw.MessageUtil;
 import me.itstautvydas.velcmdforw.VelocityCommandForward;
 import org.bukkit.command.CommandSender;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @SuppressWarnings("ClassCanBeRecord")
 public class ReloadCommand {
     private final VelocityCommandForward plugin;
@@ -24,13 +21,6 @@ public class ReloadCommand {
     public LiteralCommandNode<CommandSourceStack> vcfCommand() {
         return Commands.literal("vcf")
                 .requires(sender -> sender.getSender().hasPermission("velocitycommandforward.admin"))
-                .executes(context -> {
-                    CommandSourceStack source = context.getSource();
-                    Map<String, String> placeholders = new HashMap<>();
-                    placeholders.put("custom_command", plugin.customCommandName);
-                    messageUtil.sendMessage(source.getSender(), "command.usage", placeholders);
-                    return Command.SINGLE_SUCCESS;
-                })
                 .then(Commands.literal("reload")
                         .executes(ctx -> {
                             if (plugin.hasNoConfig()) plugin.saveDefaultConfig();

@@ -8,19 +8,13 @@ custom-command: proxyexec
 filtered-commands:
   - example_command
 
-# {custom_command} = custom command
 # {command} = The command sent by the sender
 # {sender} = The player who sent the command
 # If set to '', no message will be sent.
 messages:
-  usage: '&cUsage: /{custom_command} <command>'
   reload: '&aPlugin messages have been reloaded!'
   command-sent-as-player: '&2Command sent to proxy &7=> &a/{command}'
   command-sent-as-console: '&2Command sent as console to proxy &7=> &a/{command}'
   no-online-player: '&cThere must be at least 1 online player to be able to execute proxy console commands!'
   console-log: '[{sender}] Sending command packet to proxy => /{command}'
   velocity-log: '[{sender}] Received proxy command packet => /{command}'
-
-# Main command /vcf
-command:
-  usage: '&cUsage: /vcf reload'
