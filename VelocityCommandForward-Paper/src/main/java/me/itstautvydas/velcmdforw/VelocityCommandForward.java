@@ -27,12 +27,9 @@ public final class VelocityCommandForward extends JavaPlugin {
 
         this.messageUtil = new MessageUtil(this);
         this.customCommandName = getConfig().getString("custom-command", "proxyexec");
-        //ReloadCommand reloadCommand = new ReloadCommand(this, messageUtil);
         CommandUtil commandUtil = new CommandUtil(this, messageUtil);
 
-        //registerCommand(reloadCommand.vcfCommand());
         registerCommand(commandUtil.buildCustomCommand());
-
         this.getLogger().info("Custom Command: " + customCommandName);
     }
 
