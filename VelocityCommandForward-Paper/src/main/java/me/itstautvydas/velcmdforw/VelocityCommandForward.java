@@ -3,8 +3,6 @@ package me.itstautvydas.velcmdforw;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
-import me.itstautvydas.velcmdforw.commands.CustomCommand;
-import me.itstautvydas.velcmdforw.commands.ReloadCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -29,11 +27,11 @@ public final class VelocityCommandForward extends JavaPlugin {
 
         this.messageUtil = new MessageUtil(this);
         this.customCommandName = getConfig().getString("custom-command", "proxyexec");
-        ReloadCommand reloadCommand = new ReloadCommand(this, messageUtil);
-        CustomCommand customCommand = new CustomCommand(this, messageUtil);
+        //ReloadCommand reloadCommand = new ReloadCommand(this, messageUtil);
+        CommandUtil commandUtil = new CommandUtil(this, messageUtil);
 
-        registerCommand(reloadCommand.vcfCommand());
-        registerCommand(customCommand.buildCustomCommand());
+        //registerCommand(reloadCommand.vcfCommand());
+        registerCommand(commandUtil.buildCustomCommand());
 
         this.getLogger().info("Custom Command: " + customCommandName);
     }

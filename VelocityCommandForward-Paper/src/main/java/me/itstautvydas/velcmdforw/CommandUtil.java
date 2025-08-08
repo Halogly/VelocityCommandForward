@@ -1,4 +1,4 @@
-package me.itstautvydas.velcmdforw.commands;
+package me.itstautvydas.velcmdforw;
 
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
@@ -7,8 +7,6 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
-import me.itstautvydas.velcmdforw.MessageUtil;
-import me.itstautvydas.velcmdforw.VelocityCommandForward;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -18,17 +16,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 @SuppressWarnings("ClassCanBeRecord")
-public class CustomCommand {
+public class CommandUtil {
     private final VelocityCommandForward plugin;
     private final MessageUtil messageUtil;
 
-    public CustomCommand(VelocityCommandForward plugin, MessageUtil messageUtil) {
+    public CommandUtil(VelocityCommandForward plugin, MessageUtil messageUtil) {
         this.plugin = plugin;
         this.messageUtil = messageUtil;
     }
 
     public LiteralCommandNode<CommandSourceStack> buildCustomCommand() {
         return Commands.literal(plugin.customCommandName)
+                .requires(sender -> sender.getSender().hasPermission("velocitycommandforward.admin"))
+                .then(Commands.literal("reload")
+                        .executes(ctx -> {
+                            if (plugin.hasNoConfig()) plugin.saveDefaultConfig();
+                            plugin.reloadConfig();
+                            CommandSender sender = ctx.getSource().getSender();
+                            messageUtil.sendMessage(sender, "messages.reload");
+                            return Command.SINGLE_SUCCESS;
+                        }))
                 .then(Commands.argument("command", StringArgumentType.greedyString())
                         .executes(context -> {
                             String command = StringArgumentType.getString(context, "command");

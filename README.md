@@ -18,6 +18,8 @@ commands, such as `/skin`.
 * Another common use case is when you install the TAB plugin on Velocity and need to send commands from the backend server to the proxy server, such as `/btab scoreboard` to toggle TAB's scoreboard. While executing it manually works fine, if you use custom items from other plugins that are bound to this command, the command may fail to execute. In such cases, simply relying on this plugin's commands can resolve the issue of TAB commands not working.
 
 ## Command usage
+reload
+
 Command name can be changed in the backend plugin configuration.
 
 `/proxyexec skin set Notch`
