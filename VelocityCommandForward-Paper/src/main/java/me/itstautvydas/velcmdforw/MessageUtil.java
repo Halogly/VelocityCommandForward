@@ -9,16 +9,19 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MessageUtil {
 
-    private static final Pattern PLACEHOLDER_PATTERN = Pattern.compile("\\{(\\w+)}");
     private static JavaPlugin plugin;
+    private volatile List<String> filteredCommands;
+    private static final Pattern PLACEHOLDER_PATTERN = Pattern.compile("\\{(\\w+)}");
 
     public MessageUtil(JavaPlugin plugin) {
         MessageUtil.plugin = plugin;
+        this.filteredCommands = new CopyOnWriteArrayList<>(plugin.getConfig().getStringList("filtered-commands"));
     }
 
     public void sendMessage(CommandSender sender, String key) {
@@ -63,10 +66,13 @@ public class MessageUtil {
         return result.toString();
     }
 
+    public void updateFilteredCommands(List<String> Commands) {
+        this.filteredCommands = new CopyOnWriteArrayList<>(Commands);
+    }
+
     public boolean shouldFilterCommand(String command) {
-        List<String> filteredCommands = plugin.getConfig().getStringList("filtered-commands");
-        if (filteredCommands.isEmpty()) return false;
-        String firstPart = command.split(" ")[0].replace("/", "");
-        return filteredCommands.contains(firstPart.toLowerCase());
+        if (this.filteredCommands.isEmpty()) return false;
+        String root = command.split(" ")[0].replace("/", "");
+        return filteredCommands.contains(root.toLowerCase());
     }
 }

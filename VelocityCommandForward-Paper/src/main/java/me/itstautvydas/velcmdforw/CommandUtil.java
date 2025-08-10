@@ -17,6 +17,7 @@ import java.util.Map;
 
 @SuppressWarnings("ClassCanBeRecord")
 public class CommandUtil {
+
     private final VelocityCommandForward plugin;
     private final MessageUtil messageUtil;
 
@@ -31,7 +32,10 @@ public class CommandUtil {
                 .then(Commands.literal("reload")
                         .executes(ctx -> {
                             if (plugin.hasNoConfig()) plugin.saveDefaultConfig();
+
                             plugin.reloadConfig();
+                            plugin.reloadFilter();
+
                             CommandSender sender = ctx.getSource().getSender();
                             messageUtil.sendMessage(sender, "messages.reload");
                             return Command.SINGLE_SUCCESS;
@@ -58,50 +62,47 @@ public class CommandUtil {
     }
 
     private void handlePlayerCommand(Player player, String command, ByteArrayDataOutput out) {
-        Map<String, String> placeholders = createPlaceholders(player.getName(), command);
+        Map<String, String> placeholders = setPlaceholders(player.getName(), command);
 
-        byte flags = 0;
-        if (messageUtil.shouldFilterCommand(command)) flags |= 0x01;
+        byte filter = 0;
+        if (messageUtil.shouldFilterCommand(command)) filter |= 0x01;
 
         out.writeUTF(player.getUniqueId().toString());
         out.writeUTF(command);
-        out.writeByte(flags);
+        out.writeByte(filter);
         out.writeUTF(messageUtil.velocityLog("messages.velocity-log", placeholders));
-
         player.sendPluginMessage(plugin, VelocityCommandForward.CHANNEL, out.toByteArray());
 
-        if (messageUtil.shouldFilterCommand(command)) return;
+        if (filter == 0x01) return;
 
         plugin.log(player.getName(), command);
         messageUtil.sendMessage(player, "messages.command-sent-as-player", placeholders);
     }
 
     private void handleConsoleCommand(CommandSender sender, String command, ByteArrayDataOutput out) {
-        Map<String, String> placeholders = createPlaceholders(sender.getName(), command);
+        Map<String, String> placeholders = setPlaceholders(sender.getName(), command);
 
-        byte flags = 0;
-        if (messageUtil.shouldFilterCommand(command)) flags |= 0x01;
+        byte filter = 0;
+        if (messageUtil.shouldFilterCommand(command)) filter |= 0x01;
 
         out.writeUTF(""); // Console
         out.writeUTF(command);
-        out.writeByte(flags);
+        out.writeByte(filter);
         out.writeUTF(messageUtil.velocityLog("messages.velocity-log", placeholders));
-
         Player onlinePlayer = Bukkit.getOnlinePlayers().stream().findFirst().orElse(null);
         if (onlinePlayer == null) {
             messageUtil.sendMessage(sender, plugin.getConfig().getString("messages.no-online-player"));
             return;
         }
-
         onlinePlayer.sendPluginMessage(plugin, VelocityCommandForward.CHANNEL, out.toByteArray());
 
-        if (messageUtil.shouldFilterCommand(command)) return;
+        if (filter == 0x01) return;
 
         plugin.log("CONSOLE", command);
         messageUtil.sendMessage(sender, "messages.command-sent-as-console", placeholders);
     }
 
-    private Map<String, String> createPlaceholders(String sender, String command) {
+    private Map<String, String> setPlaceholders(String sender, String command) {
         Map<String, String> placeholders = new HashMap<>();
         placeholders.put("command", command);
         placeholders.put("sender", sender);

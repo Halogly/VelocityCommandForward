@@ -3,10 +3,27 @@ Forward commands from backend to proxy!
 
 ## Features
 * Players and console can execute proxy commands (sends a packet to the proxy to execute either as player or console).
+
 * Custom command.
 
+* Custom message.
+
+* Customize commands to be sent silently (without sending messages or console logs)
+
+* ```
+  Customize commands to be sent silently (without sending messages or console logs)
+  ```
+
+* ```
+  Customize commands to be sent silently (without sending messages or console logs)
+  ```
+
+* ```
+  Customize commands to be sent silently (without sending messages or console logs)
+  ```
+
 ## Installation
-Very simple, download both Velocity and Paper plugin versions and upload to their designed servers (proxy/backend).
+Very simple, download both Velocity and Paper plugin and upload to their designed servers (proxy/backend).
 
 ## Notes
 * Configuration only generates for backend server!
@@ -18,9 +35,15 @@ commands, such as `/skin`.
 * Another common use case is when you install the TAB plugin on Velocity and need to send commands from the backend server to the proxy server, such as `/btab scoreboard` to toggle TAB's scoreboard. While executing it manually works fine, if you use custom items from other plugins that are bound to this command, the command may fail to execute. In such cases, simply relying on this plugin's commands can resolve the issue of TAB commands not working.
 
 ## Command usage
-reload
+Command name can be changed in the backend plugin configuration `custom-command: proxyexec`.
 
-Command name can be changed in the backend plugin configuration.
+`/proxyexec reload`
+
+Used to reload plugin config.
+
+**Note:** This does not reload the `custom-command`. Changes require restarting the server to take effect.
+
+
 
 `/proxyexec skin set Notch`
 
