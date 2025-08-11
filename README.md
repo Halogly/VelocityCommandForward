@@ -44,7 +44,7 @@ Used to reload plugin config. Changing `custom-command` requires a server restar
 
 In the examples I changed the command to `proxy`, I didn't set it as default because I was worried that some other plugin could use this command already.
 
-![image](https://github.com/user-attachments/assets/63b707f1-e745-4bbb-a1d4-402f4eb292de)
+<img width="900" height="230" alt="PixPin_2025-08-11_01-42-47" src="https://github.com/user-attachments/assets/456e0029-ac56-4b4f-9df8-03102123fa5c" />
 
 ## Executing in console
 If you execute the command in the console, you won't get any output and instead it's going to show up in the proxy server logs.
@@ -52,11 +52,11 @@ There must be at least one online player to be able to send command packet to th
 
 Backend server.
 
-![image](https://github.com/user-attachments/assets/0a55af23-2319-49f0-a6d9-ec6125fdeaac)
+<img width="1300" height="100" alt="PixPin_2025-08-11_01-43-40" src="https://github.com/user-attachments/assets/32f065ae-9b73-4988-8c72-b7e6d6a244df" />
 
 Proxy server.
 
-![image](https://github.com/user-attachments/assets/1d04272e-5f70-42da-8c78-61dd529de442)
+<img width="1300" height="75" alt="PixPin_2025-08-11_01-44-22" src="https://github.com/user-attachments/assets/6e407eaa-9c59-4389-a03f-21472732198b" />
 
 ## 📄 Default configuration
 Changing `custom-command` requires a server restart.
