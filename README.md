@@ -9,7 +9,7 @@
 ## ✨ Features
 * Custom command.
 * Custom message.
-* Customize commands to be sent silently (without sending messages or console logs)
+* Customize commands to be sent silently (without sending messages or console logs).
 * Players and console can execute proxy commands (sends a packet to the proxy to execute either as player or console).
 
 ## 📥 How to install? / Installation / Setup
