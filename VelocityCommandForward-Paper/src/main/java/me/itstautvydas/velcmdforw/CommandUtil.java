@@ -28,8 +28,8 @@ public class CommandUtil {
 
     public LiteralCommandNode<CommandSourceStack> buildCustomCommand() {
         return Commands.literal(plugin.customCommandName)
-                .requires(sender -> sender.getSender().hasPermission("velocitycommandforward.admin"))
                 .then(Commands.literal("reload")
+                        .requires(sender -> sender.getSender().hasPermission("velocitycommandforward.admin"))
                         .executes(ctx -> {
                             if (plugin.hasNoConfig()) plugin.saveDefaultConfig();
 
