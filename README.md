@@ -25,7 +25,7 @@ Very simple, download both Velocity and Paper plugin and upload to their designe
 
 ## ❓ Use case for this?
 * My use case was very niche, I have a discord command that can run minecraft commands (if player is online) and
-the issue was that the discord bot was running on backend server and so I decided to make a plugin to run proxy
+the issue was that the discord bot was running on backend server, and so I decided to make a plugin to run proxy
 commands, such as `/skin`.
 * Another common use case is when you install the TAB plugin on Velocity and need to send commands from the backend server to the proxy server, such as `/btab scoreboard` to toggle TAB's scoreboard. While executing it manually works fine, if you use custom items from other plugins that are bound to this command, the command may fail to execute. In such cases, simply relying on this plugin's commands can resolve the issue of TAB commands not working.
 
@@ -36,18 +36,17 @@ Command name can be changed in the backend plugin configuration:
 custom-command: proxyexec
 ```
 
-- `/proxyexec reload`
-
-Used to reload plugin config. Changing `custom-command` requires a server restart.
-
-- `/proxyexec <the command you want to send>`
+| command                | description                                                                                          | permission                        |
+|------------------------|------------------------------------------------------------------------------------------------------|-----------------------------------|
+| `/proxyexec reload`    | Used to reload plugin config. Changing `custom-command` requires a server restart.                   | velocitycommandforward.admin (op) |
+| `/proxyexec <command>` | Forward commands to the proxy. Example: `/proxyexec tab reload` executes `/tab reload` on the proxy. | velocitycommandforward.send       |
 
 In the examples I changed the command to `proxy`, I didn't set it as default because I was worried that some other plugin could use this command already.
 
 <img width="900" height="230" alt="PixPin_2025-08-11_01-42-47" src="https://github.com/user-attachments/assets/456e0029-ac56-4b4f-9df8-03102123fa5c" />
 
 ## Executing in console
-If you execute the command in the console, you won't get any output and instead it's going to show up in the proxy server logs.
+If you execute the command in the console, you won't get any output, and instead it's going to show up in the proxy server logs.
 There must be at least one online player to be able to send command packet to the proxy (that's how plugin messaging channels work between backend and proxy).
 
 Backend server.
