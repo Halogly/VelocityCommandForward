@@ -42,9 +42,9 @@ public class CommandUtil {
                         }))
                 .then(Commands.argument("command", StringArgumentType.greedyString())
                         .requires(sender -> sender.getSender().hasPermission("velocitycommandforward.send"))
-                        .executes(context -> {
-                            String command = StringArgumentType.getString(context, "command");
-                            handleCommand(context.getSource(), new String[]{command});
+                        .executes(ctx -> {
+                            String command = StringArgumentType.getString(ctx, "command");
+                            handleCommand(ctx.getSource(), new String[]{command});
                             return Command.SINGLE_SUCCESS;
                         }))
                 .build();
