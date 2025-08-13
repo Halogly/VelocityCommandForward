@@ -8,6 +8,6 @@ website: https://itstautvydas.me
 
 permissions:
   velocitycommandforward.send:
-    default: true
+    default: not op
   velocitycommandforward.admin:
     default: op
