@@ -31,7 +31,7 @@ public class CommandUtil {
                 .then(Commands.literal("reload")
                         .requires(sender -> sender.getSender().hasPermission("velocitycommandforward.admin"))
                         .executes(ctx -> {
-                            if (plugin.hasNoConfig()) plugin.saveDefaultConfig();
+                            plugin.saveDefaultConfig();
 
                             plugin.reloadConfig();
                             plugin.reloadFilter();

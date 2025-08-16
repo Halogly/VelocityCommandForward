@@ -10,7 +10,6 @@ import org.apache.logging.log4j.core.config.Configuration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +28,7 @@ public final class VelocityCommandForward extends JavaPlugin {
     public void onEnable() {
         getServer().getMessenger().registerOutgoingPluginChannel(this, CHANNEL);
 
-        if (hasNoConfig()) saveDefaultConfig();
+        saveDefaultConfig();
         getConfig().options().copyDefaults(true);
         saveConfig();
 
@@ -66,11 +65,6 @@ public final class VelocityCommandForward extends JavaPlugin {
         if (existing instanceof Log4jFilterUtil) {
             config.getRootLogger().removeFilter(existing);
         }
-    }
-
-    public boolean hasNoConfig() {
-        File configFile = new File(getDataFolder(), "config.yml");
-        return !configFile.exists();
     }
 
     public void reloadFilter() {
